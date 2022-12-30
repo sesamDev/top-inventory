@@ -1,7 +1,32 @@
 doctype html
-html
+html(lang='en')
   head
     title= title
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+  div(class='site-container')
+      div(class='sidebar-container')
+        block sidebar
+          ul(class='sidebar-items')
+            li
+              a(href='/') Home
+            li
+              a(href='/inventory') All items
+            li
+              a(href='/inventory/categories') All categories
+            li
+              hr
+            li
+              a(href='/catalog/author/create') Create new author
+            li
+              a(href='/catalog/genre/create') Create new genre
+            li
+              a(href='/catalog/book/create') Create new book
+            li
+              a(href='/catalog/bookinstance/create') Create new book instance (copy)
+
+      main(class='main-container')
+        block content
+
