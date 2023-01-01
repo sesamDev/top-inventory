@@ -8,9 +8,9 @@ const itemController = require("../controllers/itemController");
 /// ROUTES ///
 
 // GET category list.
-router.get("/categories", categoryController.category_list);
+router.get("/category", categoryController.category_list);
 
 // GET items list.
-router.get("/items", itemController.item_list);
+router.get("/item", itemController.item_list);
 
 module.exports = router;

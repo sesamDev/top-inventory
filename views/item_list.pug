@@ -2,3 +2,12 @@ extends layout
 
 block content 
   h1= title
+
+  ul
+    each item in item_list
+      li
+        a(href=item.url) #{item.name} 
+        | In stock: #{item.inStock} pcs
+    
+    else
+      li There are no items.
