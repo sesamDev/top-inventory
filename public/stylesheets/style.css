@@ -1,14 +1,58 @@
-body {
+* {
   margin: 0;
   padding: 0;
 }
 
+body {
+  height: 100vh;
+}
+
+.header {
+  background-color: rgb(36, 37, 57);
+  color: white;
+  height: 100px;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 1.5rem;
+}
 .site-container {
   display: grid;
   grid-template-columns: 0.2fr 1fr;
-  padding-top: 200px;
 }
 
-a {
-  color: #00b7ff;
+/* Sidebar */
+.sidebar-container {
+  background-color: rgb(42, 44, 68);
+  color: white;
+  height: 100vh;
+  padding-left: 1.5rem;
+  padding-top: 1rem;
+  font-size: 1.2rem;
+}
+
+/* Sidebar link styling */
+li {
+  list-style-type: none;
+}
+
+.sidebar-container > ul > li > a {
+  color: white;
+  text-decoration: none;
+}
+
+/* Main content styling */
+.main-container {
+  padding: 2rem 2rem;
+}
+
+.main-container > ul > li > a {
+  color: rgb(50, 50, 50);
+  text-decoration: none;
+}
+
+.main-container > ul > li > a:hover {
+  color: rgb(21, 0, 254);
 }
