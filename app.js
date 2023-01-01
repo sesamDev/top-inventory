@@ -10,6 +10,13 @@ const inventoryRouter = require("./routes/inventory");
 
 var app = express();
 
+// Set up mongoose connection
+const mongoose = require("mongoose");
+const mongoDB = process.env.DB;
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+
 // view engine setup
 // eslint-disable-next-line no-undef
 app.set("views", path.join(__dirname, "views"));
