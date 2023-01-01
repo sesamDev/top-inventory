@@ -6,16 +6,17 @@ html(lang='en')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+  header(class='header')
+    h1 Inventory
   div(class='site-container')
       div(class='sidebar-container')
-        block sidebar
-          ul(class='sidebar-items')
-            li
-              a(href='/') Home
-            li
-              a(href='/inventory/item') All items
-            li
-              a(href='/inventory/category') All categories
+        ul(class='sidebar-items')
+          li
+            a(href='/') Home
+          li
+            a(href='/inventory/item') All items
+          li
+            a(href='/inventory/category') All categories
       main(class='main-container')
           block content
 
