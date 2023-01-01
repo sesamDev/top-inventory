@@ -2,11 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 // Require controller modules.
-const inventoryController = require("../controllers/inventoryContoller");
+const categoryController = require("../controllers/categoryController");
+const itemController = require("../controllers/itemController");
 
 /// ROUTES ///
 
-// GET inventory home page.
-router.get("/", inventoryController.index);
+// GET category list.
+router.get("/categories", categoryController.category_list);
+
+// GET items list.
+router.get("/items", itemController.item_list);
 
 module.exports = router;
