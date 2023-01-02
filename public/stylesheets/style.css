@@ -56,3 +56,18 @@ li {
 .main-container > ul > li > a:hover {
   color: rgb(21, 0, 254);
 }
+
+/* Form styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group > label {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.submit-button {
+  margin-top: 1rem;
+}
