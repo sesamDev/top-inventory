@@ -1,3 +1,4 @@
+const category = require("../models/category");
 const Category = require("../models/category");
 const Item = require("../models/item");
 const async = require("async");
@@ -20,16 +21,49 @@ exports.category_list = (req, res, next) => {
 };
 
 // Display form for adding a new category
-exports.category_create_get = (req, res, next) => {
+exports.category_create_get = (req, res) => {
   res.render("category_form", {
     title: "Create new category",
+    category: "",
   });
 };
 
 // Handle creating category on POST
-exports.category_create_post = (req, res, next) => {
-  res.send("TO BE IMPLEMENTED");
-};
+exports.category_create_post = [
+  // Validate and sanitize fields.
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty").trim().isLength({ min: 1 }).escape(),
+
+  // Process request
+  (req, res, next) => {
+    console.log(req.body);
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    // Create a Category object with validated data and old id
+    const category = new Category({
+      name: req.body.name,
+      description: req.body.description,
+    });
+    if (!errors.isEmpty()) {
+      // There are errors, render form again and show errors
+      res.render("category_form", {
+        title: "Create new category",
+        category: "",
+        errors: errors,
+      });
+      return;
+    }
+    // Data from form is valid, Update the record.
+    category.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Sucessful, redirect to category detail page.
+      res.redirect(category.url);
+    });
+  },
+];
 
 // Display form for updating a new category
 exports.category_update_get = (req, res, next) => {

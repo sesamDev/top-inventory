@@ -1,26 +1,39 @@
 extends layout
 
 block content 
-  h1 #{title}: #{category.name}
+  if category.name == undefined
+    h1 #{title}
 
-  form(method="POST" action='')
-    div(class="form-group")
-      label(for="name") Category name
-      input(type="text" placeholder="Category name" name="name" required="true" value=(category === undefined ? '' : category.name))
-      label(for="description") Description
-      textarea(type="text" placeholder="Category description" name="description" required="true" ) #{category === undefined ? '' : category.description}
-    br
-    p Items in this category:
-    ul
-      each item in items
-        li 
-          a(href=item.url) #{item.name}
-    button(type="submit" class="submit-button") Update
+    form(method="POST" action="")
+      div(class="form-group")
+        label(for="name") Category name
+        input(type="text" placeholder="Category name" name="name" required="true" value=(category === undefined ? '' : category.name))
+        label(for="description") Description
+        textarea(type="text" placeholder="Category description" name="description" required="true" ) #{category === undefined ? '' : category.description}
+      br
+      button(type="submit" class="submit-button") Create
 
-  hr
+  else 
+    h1 #{title}: #{category.name}
+
+    form(method="POST" action='')
+      div(class="form-group")
+        label(for="name") Category name
+        input(type="text" placeholder="Category name" name="name" required="true" value=(category === undefined ? '' : category.name))
+        label(for="description") Description
+        textarea(type="text" placeholder="Category description" name="description" required="true" ) #{category === undefined ? '' : category.description}
+      br
+      p Items in this category:
+      ul
+        each item in items
+          li 
+            a(href=item.url) #{item.name}
+      button(type="submit" class="submit-button") Update
+
+    hr
 
 
-  if errors
-    p Cannot delete category while it has items, delete below items to continue.
-    each error in errors
-      p error
+    if errors
+      p Cannot delete category while it has items, delete below items to continue.
+      each error in errors
+        p error
