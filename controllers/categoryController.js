@@ -143,7 +143,14 @@ exports.category_delete_get = (req, res, next) => {
 
 // Handle category delete on post
 exports.category_delete_post = (req, res, next) => {
-  res.send("TO BE IMPLEMENTED");
+  Category.findByIdAndRemove(req.params.id).exec((err) => {
+    if (err) {
+      return next(err);
+    }
+
+    // Successfuly deleted, redirect to category list
+    res.redirect("/inventory/category");
+  });
 };
 
 // Display category details

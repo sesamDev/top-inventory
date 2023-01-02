@@ -1,6 +1,21 @@
 extends layout 
 
 block content 
-  h1 #{title} #{category.name}
+  h1 #{title}: #{category.name}
+  br
+  if category_items.length  > 0
+    h2 You cannot delete this category
+    p Delete the following items first:
+    ul 
+      each item in category_items
+        a(href=item.url) #{item.name}
 
-  p Do you really want to delete this Category?
+    br
+    hr
+    a(href=category.url) Go back
+  else   
+    p Do you really want to delete this Category?
+
+
+    form(action="" method="POST")
+      button(type="submit") Delete
