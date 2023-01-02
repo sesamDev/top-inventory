@@ -1,0 +1,12 @@
+extends layout
+
+block content 
+  h1 #{title}: #{item.name}
+  p= item.description
+  p In stock: #{item.inStock}pcs
+  br
+
+  hr
+  a(href= item.url + "/delete") Delete item
+  br
+  a(href= item.url + "/update") Update item
