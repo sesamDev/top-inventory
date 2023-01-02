@@ -141,27 +141,17 @@ exports.item_update_post = [
 
 // Display item delete form on GET
 exports.item_delete_get = (req, res, next) => {
-  // async.parallel(
-  //   {
-  //     category(callback) {
-  //       Category.findById(req.params.id).exec(callback);
-  //     },
-  //     category_items(callback) {
-  //       Item.find({ category: req.params.id }).exec(callback);
-  //     },
-  //   },
-  //   (err, results) => {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     // No errors, render delete page
-  //     res.render("category_delete", {
-  //       title: "Delete Category",
-  //       category: results.category,
-  //       category_items: results.category_items,
-  //     });
-  //   }
-  // );
+  Item.findById(req.params.id).exec((err, item) => {
+    if (err) {
+      return next(err);
+    }
+
+    // No errors, render delete page
+    res.render("item_delete", {
+      title: "Delete Item",
+      item: item,
+    });
+  });
 };
 
 // Handle item delete on post
