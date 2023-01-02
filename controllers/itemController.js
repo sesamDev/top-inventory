@@ -20,46 +20,62 @@ exports.item_list = (req, res, next) => {
 };
 
 // Display form for adding a new category
-exports.item_create_get = (req, res) => {
-  res.render("item_form", {
-    title: "Create new item",
-    item: "",
-  });
+exports.item_create_get = (req, res, next) => {
+  // Get all categories which can be used for the item.
+  Category.find({}, "name")
+    .sort("ascending")
+    .exec((err, category) => {
+      if (err) {
+        return next(err);
+      }
+
+      // No errors so render
+      res.render("item_form", {
+        title: "Create new item",
+        item: "",
+        categories: category,
+      });
+    });
 };
 
 // Handle creating item on POST
 exports.item_create_post = [
   // Validate and sanitize fields.
-  // body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
-  // body("description", "Description must not be empty").trim().isLength({ min: 1 }).escape(),
-  // // Process request
-  // (req, res, next) => {
-  //   console.log(req.body);
-  //   // Extract the validation errors from a request.
-  //   const errors = validationResult(req);
-  //   // Create a Category object with validated data and old id
-  //   const category = new Category({
-  //     name: req.body.name,
-  //     description: req.body.description,
-  //   });
-  //   if (!errors.isEmpty()) {
-  //     // There are errors, render form again and show errors
-  //     res.render("category_form", {
-  //       title: "Create new category",
-  //       category: "",
-  //       errors: errors,
-  //     });
-  //     return;
-  //   }
-  //   // Data from form is valid, Update the record.
-  //   category.save((err) => {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     // Sucessful, redirect to category detail page.
-  //     res.redirect(category.url);
-  //   });
-  // },
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("manufacturer", "Manufacturer must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("instock", "Must not be empty").isLength({ min: 0 }).escape(),
+
+  // Process request
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Create a Category object with validated data and old id
+    const item = new Item({
+      name: req.body.name,
+      manufacturer: req.body.manufacturer,
+      description: req.body.description,
+      inStock: req.body.instock,
+      category: req.body.category._id,
+    });
+    if (!errors.isEmpty()) {
+      // There are errors, render form again and show errors
+      res.render("item_form", {
+        title: "Create new item",
+        item: "",
+        errors: errors,
+      });
+      return;
+    }
+    // Data from form is valid, Update the record.
+    item.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Sucessful, redirect to category detail page.
+      res.redirect(item.url);
+    });
+  },
 ];
 
 // Display form for updating a new category
