@@ -1,3 +1,4 @@
+const { find } = require("../models/category");
 const Category = require("../models/category");
 const Item = require("../models/item");
 const async = require("async");
@@ -80,79 +81,85 @@ exports.item_create_post = [
 
 // Display form for updating a new category
 exports.item_update_get = (req, res, next) => {
-  // async.parallel(
-  //   {
-  //     category(callback) {
-  //       Category.findById(req.params.id).exec(callback);
-  //     },
-  //     category_items(callback) {
-  //       Item.find({ category: req.params.id }).exec(callback);
-  //     },
-  //   },
-  //   (err, results) => {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     // Successful, so render
-  //     res.render("category_form", {
-  //       title: "Update category",
-  //       category: results.category,
-  //       items: results.category_items,
-  //     });
-  //   }
-  // );
+  async.parallel(
+    {
+      item(callback) {
+        Item.findById(req.params.id).exec(callback);
+      },
+      categories(callback) {
+        Category.find({}, "name").sort("ascending").exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+
+      // No errors so render
+      res.render("item_form", {
+        title: "Update item",
+        item: results.item,
+        categories: results.categories,
+      });
+    }
+  );
 };
 
 // Handle update item on POST
 exports.item_update_post = [
   // Validate and sanitize fields.
-  // body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
-  // body("description", "Description must not be empty").trim().isLength({ min: 1 }).escape(),
-  // // Process request
-  // (req, res, next) => {
-  //   console.log(req.body);
-  //   // Extract the validation errors from a request.
-  //   const errors = validationResult(req);
-  //   // Create a Category object with validated data and old id
-  //   const category = new Category({
-  //     name: req.body.name,
-  //     description: req.body.description,
-  //     _id: req.params.id,
-  //   });
-  //   if (!errors.isEmpty()) {
-  //     // There are errors, render form again and show errors
-  //     async.parallel(
-  //       {
-  //         category(callback) {
-  //           Category.findById(req.params.id).exec(callback);
-  //         },
-  //         category_items(callback) {
-  //           Item.find({ category: req.params.id }).exec(callback);
-  //         },
-  //       },
-  //       (err, results) => {
-  //         if (err) {
-  //           return next(err);
-  //         }
-  //         // Successful, so render
-  //         res.render("category_form", {
-  //           title: "Update category",
-  //           category: results.category,
-  //           items: results.category_items,
-  //           errors: errors.array(),
-  //         });
-  //       }
-  //     );
-  //   }
-  //   // Data from form is valid, Update the record.
-  //   Category.findByIdAndUpdate(req.params.id, category, {}, (err, theCategory) => {
-  //     if (err) {
-  //       return next(err);
-  //     }
-  //     // Sucessful, redirect to category detail page.
-  //     res.redirect(theCategory.url);
-  //   });
-  // },
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("manufacturer", "Manufacturer must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("instock", "Must not be empty").isLength({ min: 0 }).escape(),
+
+  // Process request
+  (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Create a Category object with validated data and old id
+    const item = new Item({
+      name: req.body.name,
+      manufacturer: req.body.manufacturer,
+      description: req.body.description,
+      inStock: req.body.instock,
+      category: req.body.category._id,
+    });
+    if (!errors.isEmpty()) {
+      // There are errors, render form again and show errors
+      async.parallel(
+        {
+          item(callback) {
+            Item.findById(req.params.id).exec(callback);
+          },
+          categories(callback) {
+            Category.find({}, "name").sort("ascending").exec(callback);
+          },
+        },
+        (err, results) => {
+          if (err) {
+            return next(err);
+          }
+
+          // No errors so render
+          res.render("item_form", {
+            title: "Update item",
+            item: results.item,
+            categories: results.categories,
+          });
+        }
+      );
+      return;
+    }
+    // Data from form is valid, Update the record.
+    item.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      // Sucessful, redirect to category detail page.
+      res.redirect(item.url);
+    });
+  },
 ];
 
 // Display item delete form on GET

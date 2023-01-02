@@ -24,12 +24,20 @@ block content
   else 
     h1 #{title}: #{item.name}
 
-    form(method="POST" action='')
+    form(method="POST" action="")
       div(class="form-group")
         label(for="name") Item name
         input(type="text" placeholder="Item name" name="name" required="true" value=(item === undefined ? '' : item.name))
-        label(for="description") Description
-        textarea(type="text" placeholder="Item description" name="description" required="true" ) #{item === undefined ? '' : category.description}
+        label(for="manufacturer") Item manufacturer
+        input(type="text" placeholder="Item manufacturer" name="manufacturer" required="true" value=(item === undefined ? '' : item.manufacturer))
+        abel(for="description") Description
+        textarea(type="text" placeholder="Item description" name="description" required="true" ) #{item === undefined ? '' : item.description}
+        label(for="in-stock") In stock 
+        input(type="number" name="instock" value=0 required)
+        label(for="category") Category
+        select(name="category")
+          each category in categories
+            option(type="text") #{category.name}
       br
       button(type="submit" class="submit-button") Update
 
