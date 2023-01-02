@@ -33,7 +33,28 @@ router.get("/category/:id", categoryController.category_detail);
 
 /// ITEM ROUTES ///
 
-// GET items list.
+// GET request for viewing item list.
 router.get("/item", itemController.item_list);
+
+// GET request for creating an item.
+router.get("/item/create", itemController.item_create_get);
+
+// POST request for creating an item.
+router.post("/item/create", itemController.item_create_post);
+
+// GET request for updating an item.
+router.get("/item/:id/update", itemController.item_update_get);
+
+// POST request for updating an item.
+router.post("/item/:id/update", itemController.item_update_post);
+
+// GET request for deleting an item.
+router.get("/item/:id/delete", itemController.item_delete_get);
+
+// POST request for deleting an item.
+router.post("/item/:id/delete", itemController.item_delete_post);
+
+// GET request for viewing an item.
+router.get("/item/:id", itemController.item_detail);
 
 module.exports = router;
