@@ -123,6 +123,7 @@ exports.item_update_post = [
       description: req.body.description,
       inStock: req.body.instock,
       category: req.body.category._id,
+      _id: req.params.id,
     });
     if (!errors.isEmpty()) {
       // There are errors, render form again and show errors
@@ -151,12 +152,12 @@ exports.item_update_post = [
       return;
     }
     // Data from form is valid, Update the record.
-    item.save((err) => {
+    Item.findByIdAndUpdate(req.params.id, item, {}, (err, theitem) => {
       if (err) {
         return next(err);
       }
       // Sucessful, redirect to category detail page.
-      res.redirect(item.url);
+      res.redirect(theitem.url);
     });
   },
 ];
